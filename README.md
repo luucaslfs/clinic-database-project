@@ -6,25 +6,27 @@
   <h3 align="center">Projeto de Banco de Dados - 23.1</h3>
 
   <p align="center">
-    <i>[Inserir descrição breve do projeto]</i>
+    <i>This is a full database project, starting from conceptual and going all over to the physical implementation in Oracle, passing throught the logical phase. Its related to an Vet Clinic system.</i>
     <br>
     <br>
-    <i>Por: <a href="https://github.com/luucaslfs">Lucas Florêncio</a>, <a href="http://teste.com">Luiz </a>, [Inserir nomes]</i>
+    <i>By: <a href="lfs@cin.ufpe.br">Lucas Florêncio</a>, <a href="lrbf@cin.ufpe.br">Luiz Roberto</a></i>
     <br>
     <br>
-    <a href="https://teste.com"><strong>Link 1 (Principal)&raquo;</strong></a>
+    <a href="./Physical"><strong>Physical Project (Oracle)&raquo;</strong></a>
     <br>
     <br>
-    <a href="http://teste.com">Link 2</a>
+    <a href="./Conceptual">Conceptual Project</a>
     &middot;
-    <a href="https://teste.com">Link 3</a>
-    &middot;
-    <a href="https://teste.com">Link 4</a>
+    <a href="./Logical">Logical Project</a>
   </p>
 </p>
 
-# Sobre o projeto
-[Em breve...]
+# About
 
-# Instruções para rodar o projeto
-[Em breve...]
+This project aims to design a database from side to side, starting from [scratch](./Conceptual/Scratch.md) to the Oracle project finished.
+
+We are building an database for a Vet Clinic system that has[...]
+
+# Running the project
+
+[Later...]
