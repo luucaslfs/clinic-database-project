@@ -12,12 +12,12 @@
     <i>By: <a href="mailto:lfs@cin.ufpe.br">Lucas Florêncio</a>, <a href="mailto:lrbf@cin.ufpe.br">Luiz Roberto</a></i>
     <br>
     <br>
-    <a href="./Physical"><strong>Physical Project (Oracle)&raquo;</strong></a>
+    <a href="https://github.com/luucaslfs/clinic-database-project#running-the-physical-project"><strong>Physical Project (Oracle)&raquo;</strong></a>
     <br>
     <br>
     <a href="https://github.com/luucaslfs/clinic-database-project#conceptual-project">Conceptual Project</a>
     &middot;
-    <a href="https://github.com/luucaslfs/clinic-database-project#conceptual-project">Logical Project</a>
+    <a href="https://github.com/luucaslfs/clinic-database-project#logical-project">Logical Project</a>
   </p>
 </p>
 
