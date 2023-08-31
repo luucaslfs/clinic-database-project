@@ -15,15 +15,15 @@
     <a href="./Physical"><strong>Physical Project (Oracle)&raquo;</strong></a>
     <br>
     <br>
-    <a href="./Conceptual">Conceptual Project</a>
+    <a href="https://github.com/luucaslfs/clinic-database-project#conceptual-project">Conceptual Project</a>
     &middot;
-    <a href="./Logical">Logical Project</a>
+    <a href="https://github.com/luucaslfs/clinic-database-project#conceptual-project">Logical Project</a>
   </p>
 </p>
 
 # About
 
-This project aims to design a database from side to side, starting from [scratch](./Conceptual/Scratch.md) to the finished Oracle project.
+This project aims to design a database from side to side, starting from [scratch](./Conceptual/Scratch.md), producing an [EER diagram](./Conceptual/EER_Model.jpg), that would be [mapped to a relational database](./Logical/Relational_Mapping.md) to finally build the [physical Oracle project](./Physical/).
 
 We are building an database for a Vet Clinic system that has[...]
 
