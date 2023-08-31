@@ -9,7 +9,7 @@
     <i>This is a full database project, starting from conceptual and going all over to the physical implementation in Oracle, passing throught the logical phase. Its related to an Vet Clinic system.</i>
     <br>
     <br>
-    <i>By: <a href="lfs@cin.ufpe.br">Lucas Florêncio</a>, <a href="lrbf@cin.ufpe.br">Luiz Roberto</a></i>
+    <i>By: <a href="mailto:lfs@cin.ufpe.br">Lucas Florêncio</a>, <a href="mailto:lrbf@cin.ufpe.br">Luiz Roberto</a></i>
     <br>
     <br>
     <a href="./Physical"><strong>Physical Project (Oracle)&raquo;</strong></a>
