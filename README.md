@@ -9,7 +9,7 @@
     <i>[Inserir descrição breve do projeto]</i>
     <br>
     <br>
-    <i>Por: <a href="https://github.com/luucaslfs">Lucas Florêncio</a>, <a href="http://teste.com">Alex Ramos</a>, [Inserir nomes]</i>
+    <i>Por: <a href="https://github.com/luucaslfs">Lucas Florêncio</a>, <a href="http://teste.com">Luiz </a>, [Inserir nomes]</i>
     <br>
     <br>
     <a href="https://teste.com"><strong>Link 1 (Principal)&raquo;</strong></a>
