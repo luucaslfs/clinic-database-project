@@ -23,10 +23,52 @@
 
 # About
 
-This project aims to design a database from side to side, starting from [scratch](./Conceptual/Scratch.md) to the Oracle project finished.
+This project aims to design a database from side to side, starting from [scratch](./Conceptual/Scratch.md) to the finished Oracle project.
 
 We are building an database for a Vet Clinic system that has[...]
 
-# Running the project
+# Conceptual Project
+
+![EERModel](./Conceptual/EER_Model.jpg "EER Model of our Database")
+
+# Logical Project
+
+```
+tutor (*CPF*, Nome, Log, Estado, Cidade)
+
+Num_telefone (*CPF, numero*)
+CPF -> Tutor(CPF)
+
+Animal (*ID, CPFDono*, Dnascimento, Nome)
+CPFDono -> Tutor(CPF)
+
+Prontuario(*ID*, Histórico, [ID_animal, CPFDono]!)
+ID_animal, CPFDono -> Animal(ID, CPFDono)
+
+Veterinario(*CRVet*, nome, CRVetSup{obrigatório?})
+CRVetSup -> Veterinario(CRVet)
+
+Atendimento (*Data, IDAnimal, CRVet*)
+IDAnimal -> Animal(ID)
+CRVet -> Veterinario(CRVet)
+
+Receita(*ID*, descritivo, [Data, IDAnimal, CRVet]!)
+Data, IDAnimal, CRVet -> Atendimento(Data, IDAnimal, CRVet)
+
+Procedimento(*ID*, Desc, Data, Medicação)
+
+Clínico(*ID*, Exame)
+ID -> Procedimento(ID)
+
+Domiciliar(*ID*, DataVolta, Recomendação)
+ID -> Procedimento(ID)
+
+Executa(*IDAnimal, IDProcedimento, CRVet*)
+IDAnimal -> Animal(ID)
+IDProcedimento -> Procedimento(ID)
+CRVet -> Veterinario(CRVet)
+```
+
+# Running the physical project
 
 [Later...]
