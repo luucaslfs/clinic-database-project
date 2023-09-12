@@ -6,7 +6,7 @@
   <h3 align="center">Projeto de Banco de Dados - 23.1</h3>
 
   <p align="center">
-    <i>This is a full database project, starting from conceptual and going all over to the physical implementation in Oracle, passing throught the logical phase. Its related to an Vet Clinic system.</i>
+    <i>This is a full database project, starting from conceptual and going all over to the physical implementation in Oracle, passing throught the logical phase. Its related to an Veterinary Clinic system.</i>
     <br>
     <br>
     <i>By: <a href="mailto:lfs@cin.ufpe.br">Lucas Florêncio</a>, <a href="mailto:lrbf@cin.ufpe.br">Luiz Roberto</a></i>
@@ -27,9 +27,13 @@ This project aims to design a database from side to side, starting from [scratch
 
 We are building an database for a Vet Clinic system that has[...]
 
+<br>
+
 # Conceptual Project
 
 ![EERModel](./Conceptual/EER_Model.jpg "EER Model of our Database")
+
+<br>
 
 # Logical Project
 
@@ -68,10 +72,13 @@ IDAnimal -> Animal(ID)
 IDProcedimento -> Procedimento(ID)
 CRVet -> Veterinario(CRVet)
 ```
+<br>
 
 # Running the physical project
 
 ![SQL Live](./Physical/Preview.jpg "A preview of our physical model in Live SQL (Oracle)")
 
+<br>
 
-[Here you can see information about running/testing the actual physical model of this database project](./Physical/Physical_Model.md)
+- We used LiveSQL tool from Oracle to host and run the DDL, DML and Procedures.
+- [Here you can see information about running/testing the actual physical model of this database project.](./Physical/Physical_Model.md)
