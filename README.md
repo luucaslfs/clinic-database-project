@@ -71,4 +71,7 @@ CRVet -> Veterinario(CRVet)
 
 # Running the physical project
 
-[Later...]
+![SQL Live](./Physical/Preview.jpg "A preview of our physical model in Live SQL (Oracle)")
+
+
+[Here you can see information about running/testing the actual physical model of this database project](./Physical/Physical_Model.md)
