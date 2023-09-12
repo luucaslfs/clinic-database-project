@@ -1,0 +1,230 @@
+-- Procedimento para adicionar um novo animal
+CREATE OR REPLACE PROCEDURE InserirNovoAnimal(
+    p_CPF TUTOR.CPF%TYPE,
+    p_NomeAnimal VARCHAR2,
+    p_DataNascimento DATE
+)
+IS
+BEGIN
+    INSERT INTO ANIMAL(CPF, NASCIMENTO, NOME)
+    VALUES (p_CPF, p_DataNascimento, p_NomeAnimal);
+    COMMIT;
+    DBMS_OUTPUT.PUT_LINE('Novo animal inserido com sucesso.');
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Erro ao inserir novo animal: ' || SQLERRM);
+END InserirNovoAnimal;
+/
+
+
+-- Procedimento para atualizar dados de um tutor
+CREATE OR REPLACE PROCEDURE AtualizarInfoTutor(
+    p_CPF TUTOR.CPF%TYPE,
+    p_Nome VARCHAR2,
+    p_Logradouro VARCHAR2,
+    p_Estado VARCHAR2,
+    p_Cidade VARCHAR2
+)
+IS
+BEGIN
+    UPDATE TUTOR
+    SET NOME = p_Nome, LOG = p_Logradouro, ESTADO = p_Estado, CIDADE = p_Cidade
+    WHERE CPF = p_CPF;
+    COMMIT;
+    DBMS_OUTPUT.PUT_LINE('Informações do tutor atualizadas com sucesso.');
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Erro ao atualizar informações do tutor: ' || SQLERRM);
+END AtualizarInfoTutor;
+/
+
+-- Procedimento para consultar o histórico dos animais de um tutor
+CREATE OR REPLACE PROCEDURE CONSULTAR_HISTORICO_POR_DONO (P_CPF VARCHAR2) AS
+    V_HISTORICO PRONTUARIO.HISTORICO%TYPE;
+BEGIN
+    FOR R IN (
+        SELECT PR.HISTORICO
+        FROM PRONTUARIO PR
+        WHERE PR.CPF = P_CPF
+    ) LOOP
+        V_HISTORICO := R.HISTORICO;
+        DBMS_OUTPUT.PUT_LINE('Histórico: ' || V_HISTORICO);
+    END LOOP;
+END;
+
+
+--Sequência para criação de novas IDs de Procedimento
+CREATE SEQUENCE procedimento_sequence
+    START WITH 7
+    INCREMENT BY 1
+    MAXVALUE 9999
+    NOCACHE
+    NOCYCLE;
+
+
+-- Procedimento para criar um novo atendimento
+CREATE OR REPLACE PROCEDURE AdicionarAtendimento( 
+    pData DATE, 
+    pNomeAnimal VARCHAR2, 
+    pCPFAnimal VARCHAR2, 
+    pCRVet VARCHAR2 
+) 
+AS 
+BEGIN 
+    INSERT INTO ATENDIMENTO(DATA, NOME, CPF, CRVET) 
+    VALUES (pData, pNomeAnimal, pCPFAnimal, pCRVet); 
+
+    UPDATE PRONTUARIO 
+    SET HISTORICO = HISTORICO || CHR(10) || 'Novo atendimento em ' || TO_CHAR(pData, 'DD-MM-YYYY') || ' com o veterinário ' || pCRVet 
+    WHERE NOME = pNomeAnimal AND CPF = pCPFAnimal; 
+     
+    COMMIT; 
+    DBMS_OUTPUT.PUT_LINE('Atendimento adicionado com sucesso.');
+END;
+
+
+-- Procedimento para criar um novo procedimento e atualizar o histórico do paciente com ele
+CREATE OR REPLACE PROCEDURE AdicionarProcedimentoEAtualizarHistorico (    
+    p_descricao_procedimento IN VARCHAR2,    
+    p_data_procedimento IN DATE,    
+    p_nome_animal IN VARCHAR2,    
+    p_cpf_tutor IN VARCHAR2,    
+    p_recomendacao_procedimento IN VARCHAR2    
+) AS    
+    -- Declaração de variável para armazenar o IDP que vai ser gerado   
+    v_idp VARCHAR2(4);    
+BEGIN    
+    -- Obtêm o próximo valor da sequência procedimento_sequence
+    SELECT 'P' || LPAD(procedimento_sequence.NEXTVAL, 3, '0') INTO v_idp FROM DUAL;
+       
+    -- Insere o novo procedimento e obtem o IDP gerado  
+    INSERT INTO PROCEDIMENTO (IDP, DESCRICAO, DATA, RECOMENDACAO)    
+    VALUES (v_idp, p_descricao_procedimento, p_data_procedimento, p_recomendacao_procedimento);    
+    
+    -- Insere a descrição do procedimento no histórico do prontuário do animal   
+    INSERT INTO PRONTUARIO (HISTORICO, NOME, CPF, IDP)    
+    VALUES (    
+        'Procedimento (' || v_idp || '): ' || p_descricao_procedimento || ' em ' || TO_CHAR(p_data_procedimento, 'DD-MM-YYYY HH24:MI:SS'),    
+        p_nome_animal,    
+        p_cpf_tutor,    
+        v_idp    
+    );    
+    
+    COMMIT;    
+    DBMS_OUTPUT.PUT_LINE('Procedimento adicionado e histórico atualizado com sucesso.');    
+EXCEPTION    
+    WHEN OTHERS THEN    
+        DBMS_OUTPUT.PUT_LINE('Erro ao adicionar procedimento e atualizar histórico: ' || SQLERRM);    
+        ROLLBACK;    
+END;
+
+-- Sequencia para a criação de novas IDs de Receita
+CREATE SEQUENCE idr_sequence
+    START WITH 7
+    INCREMENT BY 1
+    MAXVALUE 9999
+    NOCACHE
+    NOCYCLE;
+
+
+-- Procedimento para criar uma receita nova e atualizar o histórico do paciente com ela
+CREATE OR REPLACE PROCEDURE AtualizarHistoricoComReceita (
+    p_nome_animal IN VARCHAR2,
+    p_cpf_tutor IN VARCHAR2,
+    p_data_atendimento DATE,
+    p_crvet VARCHAR2,
+    p_descricao_receita VARCHAR2
+) AS
+    v_idr VARCHAR2(4);
+
+BEGIN
+    SELECT 'R' || LPAD(idr_sequence.NEXTVAL, 3, '0') INTO v_idr FROM DUAL;
+
+    INSERT INTO RECEITA (IDR, DESCRITIVO, DATA, NOME, CPF, CRVET)
+    VALUES (v_idr, p_descricao_receita, p_data_atendimento, p_nome_animal, p_cpf_tutor, p_crvet);
+    
+    INSERT INTO PRONTUARIO (HISTORICO, NOME, CPF, IDP)    
+    VALUES (    
+        'Receita (' || v_idr || '): ' || p_descricao_receita || ' em ' || TO_CHAR(p_data_atendimento, 'DD-MM-YYYY HH24:MI:SS'),    
+        p_nome_animal,    
+        p_cpf_tutor,    
+        v_idr    
+    );    
+
+    COMMIT;
+    DBMS_OUTPUT.PUT_LINE('Histórico atualizado com a nova receita adicionada com sucesso.');
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Erro ao atualizar o histórico com a nova receita: ' || SQLERRM);
+        ROLLBACK;
+END;
+
+-- Função para retornar histórico, procedimentos, e recomendação de um animal
+CREATE OR REPLACE FUNCTION ConstruirResumoSaude(p_NomeAnimal VARCHAR2, p_CPF TUTOR.CPF%TYPE) 
+RETURN CLOB 
+IS 
+   v_Resumo CLOB;
+   -- Variáveis para cada seção do resumo.
+   v_Historico CLOB;
+   v_ProcedimentosAnteriores CLOB;
+   v_RecomendacoesFuturas CLOB;
+
+BEGIN
+   -- Inicializa o resumo com informações básicas do animal
+   v_Resumo := 'Resumo de Saúde para ' || p_NomeAnimal || ':';
+
+   -- Obtém o histórico médico do animal
+   v_Historico := 'Histórico Médico:';
+   FOR r IN (SELECT HISTORICO FROM PRONTUARIO WHERE NOME = p_NomeAnimal AND CPF = p_CPF)
+   LOOP
+      v_Historico := v_Historico || CHR(10) || r.HISTORICO;
+   END LOOP;
+
+   -- Obtém informações sobre procedimentos anteriores
+   v_ProcedimentosAnteriores := 'Procedimentos Anteriores:';
+   FOR r IN (SELECT P.DESCRICAO, P.DATA
+             FROM PROCEDIMENTO P
+             JOIN EXECUTA E ON P.IDP = E.IDP
+             WHERE E.NOME = p_NomeAnimal AND E.CPF = p_CPF)
+   LOOP
+      v_ProcedimentosAnteriores := v_ProcedimentosAnteriores || CHR(10) || 'Data: ' || TO_CHAR(r.DATA, 'DD-MM-YYYY') || ', Descrição: ' || r.DESCRICAO;
+   END LOOP;
+
+   -- Obtém recomendações futuras com base nos procedimentos médicos
+   v_RecomendacoesFuturas := 'Recomendações Futuras:';
+   FOR r IN (SELECT RECOMENDACAO
+             FROM PROCEDIMENTO P
+             JOIN EXECUTA E ON P.IDP = E.IDP
+             WHERE E.NOME = p_NomeAnimal AND E.CPF = p_CPF AND P.RECOMENDACAO IS NOT NULL)
+   LOOP
+      v_RecomendacoesFuturas := v_RecomendacoesFuturas || CHR(10) || r.RECOMENDACAO;
+   END LOOP;
+
+   -- Concatena todas as seções em v_Resumo
+   v_Resumo := v_Resumo || CHR(10) || v_Historico || CHR(10) || v_ProcedimentosAnteriores || CHR(10) || v_RecomendacoesFuturas;
+
+   -- Retorna o resumo de saúde
+   RETURN v_Resumo;
+
+EXCEPTION
+   WHEN NO_DATA_FOUND THEN
+      RETURN 'Animal não encontrado ou sem histórico médico.';
+   WHEN OTHERS THEN
+      RETURN 'Erro ao gerar o resumo de saúde.';
+END;
+/
+
+-- Procedimento necessário para usar a função ConstruirResumoSaude()
+CREATE OR REPLACE PROCEDURE ImprimirResumoSaude(p_NomeAnimal VARCHAR2, p_CPF TUTOR.CPF%TYPE) 
+IS
+   v_Resumo CLOB;
+BEGIN
+   v_Resumo := ConstruirResumoSaude(p_NomeAnimal, p_CPF);
+   DBMS_OUTPUT.PUT_LINE(v_Resumo);
+END;
+/
+
+BEGIN
+   ImprimirResumoSaude('REX', '11111111111'); -- Substituir pelos valores desejados
+END;
+/
