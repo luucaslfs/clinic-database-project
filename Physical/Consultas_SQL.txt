@@ -45,13 +45,14 @@ SELECT A.NOME, A.CPF,
      WHERE A.NOME = AT.NOME AND A.CPF = AT.CPF) AS TotalAtendimentos
 FROM ANIMAL A;
 
--- Consulta com SUBCONSULTA DO TIPO LINHA, retorna os animais juntamente com o CRVet do último veterinário que os atendeu.
-SELECT A.NOME, A.CPF AS CPFDONO,
-    (SELECT VT.NOME
-     FROM ATENDIMENTO AT, VETERINARIO VT
-     WHERE A.NOME = AT.NOME AND A.CPF = AT.CPF AND AT.CRVET = VT.CRVET
-     ORDER BY AT.DATA DESC
-     FETCH FIRST 1 ROW ONLY) AS UltimoVeterinario
+-- Consulta com SUBCONSULTA DO TIPO LINHA, retorna os nomes dos tutores que moram no mesmo estado e cidade do tutor com cpf 11111111111
+ SELECT NOME
+FROM TUTOR 
+WHERE (CIDADE, ESTADO) = 
+       (SELECT CIDADE, ESTADO 
+        FROM TUTOR 
+        WHERE CPF = 11111111111);
+
 FROM ANIMAL A;
 
 -- Consulta com SUBCONSUTLA DO TIPO TABELA, retorna os animais juntamente com o total de receitas geradas para cada animal.
