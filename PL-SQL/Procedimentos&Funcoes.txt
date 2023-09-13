@@ -43,6 +43,8 @@ EXCEPTION
 END AtualizarInfoTutor;
 /
 
+
+
 -- Procedimento para adicionar um novo animal e criar o seu prontuário
 CREATE OR REPLACE PROCEDURE InserirNovoAnimalCriarProntuario(
     p_cpf_tutor TUTOR.CPF%TYPE,

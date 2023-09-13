@@ -1,0 +1,20 @@
+-- Como rodar procedimeto AdicionarAtendimentoReceita
+BEGIN
+    AdicionarAtendimentoReceita (
+        p_data_atendimento => TO_DATE('0000-00-00', 'YYYY-MM-DD'), -- Substituir pelos valores desejados
+        p_nome_animal => 'NOME', -- Substituir pelos valores desejados
+        p_cpf_tutor => '12345678901', -- Substituir pelos valores desejados
+        p_crvet_vet => 'VET000', -- Substituir pelos valores desejados 
+        p_descricoes_receita => SYS.ODCIVARCHAR2LIST('Descricao1', 'Descricao2', 'Descricao3') -- Substituir pelos valores desejados
+    );
+END;
+/
+
+-- Como rodar procedimento necessário para a retornar a função ConstruirResumoSaude()
+BEGIN
+   ImprimirResumoSaude('REX', '11111111111'); -- Substituir pelos valores desejados
+END;
+/
+
+
+-- Toda vez que uma data precisar ser inserida em algum procedimento, utilizar esse formato 'TO_DATE('0000-00-00', 'YYYY-MM-DD')'.
