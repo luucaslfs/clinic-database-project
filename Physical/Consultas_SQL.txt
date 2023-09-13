@@ -1,0 +1,99 @@
+-- Consulta GROUP BY/HAVING, retorna nome dos tutores que possuem mais de um animal e a quantidade de animais desses.
+SELECT T.NOME AS TUTOR, COUNT(A.NOME) AS QTD_ANIMAIS 
+FROM TUTOR T 
+JOIN ANIMAL A ON T.CPF = A.CPF 
+GROUP BY T.NOME 
+HAVING COUNT(A.NOME) > 1;
+
+-- Consulta JUNÇÃO INTERNA, retorna os atendimentos armazenados no BD.
+SELECT A.NOME AS ANIMAL, T.NOME AS TUTOR, V.NOME AS VETERINARIO, AT.DATA 
+FROM ATENDIMENTO AT 
+JOIN ANIMAL A ON AT.CPF = A.CPF 
+JOIN TUTOR T ON A.CPF = T.CPF 
+JOIN VETERINARIO V ON AT.CRVET = V.CRVET;
+
+-- Consulta JUNÇÃO EXTERNA, retorna os atendimentos e as receitas prescritas nesses, incluindo os atendimentos sem receitas.
+SELECT A.DATA, A.NOME AS NomeAnimal, A.CPF AS CPFTutor, A.CRVET AS CRVet, R.IDR, R.DESCRITIVO
+FROM ATENDIMENTO A
+LEFT JOIN RECEITA R ON A.DATA = R.DATA AND A.NOME = R.NOME AND A.CPF = R.CPF AND A.CRVET = R.CRVET
+ORDER BY A.DATA;
+
+--Consulta SEMI JUNÇÃO, retorna os animais que já foram atendidos.
+SELECT DISTINCT A.NOME, A.CPF
+FROM ANIMAL A
+WHERE EXISTS (
+    SELECT 1
+    FROM ATENDIMENTO ATE
+    WHERE A.NOME = ATE.NOME AND A.CPF = ATE.CPF
+);
+
+--Consulta ANTI JOIN, retorna os animais que não ainda não foram atendidos.
+SELECT A.NOME, A.CPF 
+FROM ANIMAL A
+WHERE NOT EXISTS ( 
+    SELECT 1 
+    FROM ATENDIMENTO ATE
+    WHERE ATE.CPF = A.CPF 
+);
+
+-- Consulta com SUBCONSULTA DO TIPO ESCALAR, retorna os animais junto com o total de atendimentos que cada um teve.
+SELECT A.NOME, A.CPF,
+    (SELECT COUNT(*)
+     FROM ATENDIMENTO AT
+     WHERE A.NOME = AT.NOME AND A.CPF = AT.CPF) AS TotalAtendimentos
+FROM ANIMAL A;
+
+-- Consulta com SUBCONSULTA DO TIPO LINHA, retorna os animais e a data do último atendimento de cada um.
+SELECT A.NOME, A.CPF AS CPFTUTOR,
+    (SELECT MAX(AT.DATA)
+     FROM ATENDIMENTO AT
+     WHERE AT.NOME = A.NOME AND AT.CPF = A.CPF) AS UltimoAtendimento
+FROM ANIMAL A;
+
+-- Consulta com SUBCONSUTLA DO TIPO TABELA, retorna os animais juntamente com o total de receitas geradas para cada animal.
+SELECT A.NOME, A.CPF, COALESCE(Q1.TotalReceitas, 0) AS TotalReceitas
+FROM ANIMAL A
+LEFT JOIN (
+    SELECT NOME, CPF, COUNT(*) AS TotalReceitas
+    FROM RECEITA
+    GROUP BY NOME, CPF
+) Q1 ON A.NOME = Q1.NOME AND A.CPF = Q1.CPF;
+
+-- Consulta com OPERAÇÃO DE CONJUNTO, retorna informações detalhadas sobre os procedimentos realizados em animais, incluindo o nome do animal, o ID do procedimento, a descrição do procedimento, o tipo do procedimento e o nome do veterinário responsável.
+SELECT 
+    A.NOME AS "Nome do Animal",
+    E.IDP AS "ID do Procedimento",
+    P.DESCRICAO AS "Descrição do Procedimento",
+    CASE 
+        WHEN P.IDP IN (SELECT IDP FROM DOMICILIAR) THEN 'Domiciliar'
+        WHEN P.IDP IN (SELECT IDP FROM CLINICO) THEN 'Clínico'
+        ELSE 'Tipo Desconhecido'
+    END AS "Tipo de Procedimento",
+    V.NOME AS "Nome do Veterinário"
+FROM 
+    EXECUTA E
+INNER JOIN 
+    ANIMAL A ON E.NOME = A.NOME AND E.CPF = A.CPF
+INNER JOIN 
+    PROCEDIMENTO P ON E.IDP = P.IDP
+INNER JOIN 
+    VETERINARIO V ON E.CRVET = V.CRVET
+UNION
+SELECT 
+    A.NOME AS "Nome do Animal",
+    E.IDP AS "ID do Procedimento",
+    P.DESCRICAO AS "Descrição do Procedimento",
+    CASE 
+        WHEN P.IDP IN (SELECT IDP FROM DOMICILIAR) THEN 'Domiciliar'
+        WHEN P.IDP IN (SELECT IDP FROM CLINICO) THEN 'Clínico'
+        ELSE 'Tipo Desconhecido'
+    END AS "Tipo de Procedimento",
+    V.NOME AS "Nome do Veterinário"
+FROM 
+    EXECUTA E
+INNER JOIN 
+    ANIMAL A ON E.NOME = A.NOME AND E.CPF = A.CPF
+INNER JOIN 
+    PROCEDIMENTO P ON E.IDP = P.IDP
+INNER JOIN 
+    VETERINARIO V ON E.CRVET = V.CRVET;
