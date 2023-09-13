@@ -38,39 +38,39 @@ We are building an database for a Vet Clinic system that has[...]
 # Logical Project
 
 ```
-tutor (*CPF*, Nome, Log, Estado, Cidade)
+TUTOR (*CPF*, NOME, LOG, ESTADO, CIDADE)
 
-Num_telefone (*CPF, numero*)
-CPF -> Tutor(CPF)
+NUM_TELEFONE (*CPF, NUMERO*)
+CPF -> TUTOR(CPF)
 
-Animal (*ID, CPFDono*, Dnascimento, Nome)
-CPFDono -> Tutor(CPF)
+ANIMAL (*NOME, CPF*, NASCIMENTO)
+CPF -> TUTOR(CPF)
 
-Prontuario(*ID*, Histórico, [ID_animal, CPFDono]!)
-ID_animal, CPFDono -> Animal(ID, CPFDono)
+PRONTUARIO(*IDP*, HISTORICO, [CPF, NOME]!)
+CPF, NOME -> ANIMAL(CPF, NOME)
 
-Veterinario(*CRVet*, nome, CRVetSup{obrigatório?})
-CRVetSup -> Veterinario(CRVet)
+VETERINARIO(*CRVET*, NOME, CRVETSUP)
+CRVETSUP -> VETERINARIO(CRVET)
 
-Atendimento (*Data, IDAnimal, CRVet*)
-IDAnimal -> Animal(ID)
-CRVet -> Veterinario(CRVet)
+ATENDIMENTO (*DATA, NOME, CPF, CRVET*)
+NOME, CPF -> ANIMAL(NOME)
+CRVET -> VETERINARIO(CRVET)
 
-Receita(*ID*, descritivo, [Data, IDAnimal, CRVet]!)
-Data, IDAnimal, CRVet -> Atendimento(Data, IDAnimal, CRVet)
+RECEITA(*IDR*, DESCRITIVO, DATA!, NOME!, CPF!, CRVET!)
+DATA, NOME, CPF, CRVET -> ATENDIMENTO(DATA, NOME, CPF, CRVET)
 
-Procedimento(*ID*, Desc, Data, Medicação)
+PROCEDIMENTO(*IDP*, DESCRICAO, DATA, MEDICACAO, RECOMENDACAO)
 
-Clínico(*ID*, Exame)
-ID -> Procedimento(ID)
+CLINICO(*IDP*, EXAME)
+IDP -> PROCEDIMENTO(IDP)
 
-Domiciliar(*ID*, DataVolta, Recomendação)
-ID -> Procedimento(ID)
+DOMICILIAR(*IDP*, DATAVOLTA)
+IDP -> PROCEDIMENTO(IDP)
 
-Executa(*IDAnimal, IDProcedimento, CRVet*)
-IDAnimal -> Animal(ID)
-IDProcedimento -> Procedimento(ID)
-CRVet -> Veterinario(CRVet)
+EXECUTA(*NOME, CPF, IDP, CRVET*)
+NOME, CPF -> ANIMAL(NOME, CPF)
+IDP -> PROCEDIMENTO(IDP)
+CRVET -> VETERINARIO(CRVET)
 ```
 <br>
 
